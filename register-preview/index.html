@@ -1,0 +1,1041 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#145e2e">
+<meta name="description" content="Register for a 2026 programme at the Academy of AutoMechanics, Tunapuna. Three steps on one page: course, your details, payment.">
+<title>Register — Academy of AutoMechanics 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="register.css">
+<style>
+/* The few things Tailwind utilities do not express cleanly. */
+[hidden]{display:none!important}
+/* A step expanding below the fold would otherwise trigger scroll anchoring,
+   which shoves the page down to keep the footer still. We position the page
+   ourselves, so anchoring is off. */
+body{overflow-anchor:none}
+.step-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.4,0,.2,1)}
+.step-body>div{overflow:hidden}
+.step.is-open .step-body{grid-template-rows:1fr}
+.card-radio input:checked~.pick{border-color:#145e2e;background:#eef7f1;box-shadow:0 0 0 3px rgba(20,94,46,.14)}
+.card-radio input:checked~.pick .dot{border-color:#145e2e;background:#145e2e}
+.card-radio input:checked~.pick .dot::after{background:#fff}
+.card-radio input:focus-visible~.pick{outline:3px solid #1a7a3a;outline-offset:2px}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid #b9c3bc;background:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.dot::after{content:"";width:10px;height:10px;border-radius:50%;background:transparent}
+.lvl[aria-pressed="true"]{border-color:#145e2e;background:#145e2e;color:#fff}
+.lvl:focus-visible{outline:3px solid #1a7a3a;outline-offset:2px}
+.fld.is-bad input,.fld.is-bad textarea,.fld.is-bad select{border-color:#c0392b;background:#fffafa}
+.fld .err{display:none}
+.fld.is-bad .err{display:flex}
+@media(prefers-reduced-motion:reduce){.step-body{transition:none}}
+</style>
+</head>
+<body class="bg-[#f0f0f2] text-body font-inter antialiased">
+<div id="previewBar" style="position:sticky;top:0;z-index:9999;background:#fff200;color:#0a0f0c;font:700 14px/1.3 Inter,Helvetica,Arial,sans-serif;text-align:center;padding:10px 14px;border-bottom:2px solid #0a0f0c">PREVIEW FOR ROY — not the live page. Tap an online course and a level to see how it works. Nothing you enter here is sent or charged.</div>
+
+
+<!-- One compact sticky strip: logo · title · help, then the three-step progress. No hero. -->
+<div class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-line shadow-sm">
+  <div class="max-w-2xl mx-auto px-4 pt-2 pb-1.5 flex items-center gap-3">
+    <a href="https://academyofautomechanics.com" aria-label="Academy of AutoMechanics home" class="flex-none">
+      <img class="h-7 w-auto" src="https://academyofautomechanics.com/email-assets/aoam-logo-h.png" alt="Academy of AutoMechanics">
+    </a>
+    <h1 class="font-bebas text-xl tracking-wide text-ink leading-none truncate min-w-0">Register for 2026 <span class="hidden sm:inline text-muted text-sm font-inter font-medium tracking-normal">· about five minutes</span></h1>
+    <a class="ml-auto flex-none inline-flex items-center gap-1.5 rounded-full border border-green text-green font-bebas tracking-wider text-xs px-3 py-1.5" href="https://wa.me/18683321272">WhatsApp help</a>
+  </div>
+  <div class="max-w-2xl mx-auto px-4 pb-1.5">
+    <ol class="grid grid-cols-3 gap-2 text-[10px] font-bold tracking-widest uppercase text-center" id="progress">
+      <li data-p="1" class="text-green">1 · Course</li>
+      <li data-p="2" class="text-gray-400">2 · Your details</li>
+      <li data-p="3" class="text-gray-400">3 · Payment</li>
+    </ol>
+    <div class="mt-1 h-1 rounded-full bg-gray-200 overflow-hidden"><span id="bar" class="block h-full w-1/3 bg-green transition-all duration-500"></span></div>
+  </div>
+</div>
+
+<main class="max-w-2xl mx-auto px-4 pb-24">
+<form id="regForm" action="/register/submit.php" method="POST" enctype="multipart/form-data" novalidate class="space-y-4 mt-4">
+  <div id="formAlert" role="alert" aria-live="assertive" class="sr-only"></div>
+  <!-- honeypot: humans never see it -->
+  <input type="text" name="website" value="" tabindex="-1" autocomplete="off" aria-hidden="true" class="absolute -left-[9999px] h-0 w-0 opacity-0">
+  <!-- what the office receives, filled by the page -->
+  <input type="hidden" name="Payment method" id="pmField" value="">
+  <input type="hidden" name="Registration fee (TT$)" id="feeField" value="">
+  <input type="hidden" name="Registration fee waived" id="waivedField" value="No">
+  <input type="hidden" name="Coupon code" id="couponField" value="">
+  <input type="hidden" name="Course id" id="courseIdField" value="">
+  <input type="hidden" name="Tuition (TT$)" id="tuitionField" value="">
+  <input type="hidden" name="Tuition structure" id="structField" value="">
+  <input type="hidden" name="Amount due today (TT$)" id="totalField" value="">
+  <input type="hidden" name="Payment schedule" id="schedField" value="">
+  <input type="hidden" name="Payment reference" id="refField" value="">
+  <input type="hidden" name="Payment acknowledged" id="ackField" value="">
+  <input type="hidden" name="Drop-off booked" id="bookedField" value="">
+  <input type="hidden" name="Course slug" id="slugField" value="">
+  <input type="hidden" name="Signed on" id="signedOn" value="">
+  <!-- card path: the registration is SUBMITTED first; the thank-you page then offers this link -->
+  <input type="hidden" name="Pay link" id="payLinkField" value="">
+
+  <!-- ================= STEP 1 ================= -->
+  <section class="step is-open bg-white rounded-2xl border border-line shadow-sm" data-step="1">
+    <button type="button" class="step-head w-full flex items-center gap-3 px-4 py-4 text-left" data-open="1" aria-expanded="true" aria-controls="body-1">
+      <span class="num flex-none w-8 h-8 rounded-full bg-green text-white font-bebas text-lg flex items-center justify-center">1</span>
+      <span class="flex-1 min-w-0">
+        <span class="block font-bebas text-xl tracking-wide text-ink">Choose your course</span>
+        <span class="summary block text-sm text-muted truncate" data-summary="1"></span>
+      </span>
+      <span class="edit hidden text-sm font-bold text-green">Edit</span>
+    </button>
+    <div class="step-body" id="body-1"><div>
+      <div class="px-4 pb-5">
+        <div class="rounded-xl bg-green-lt border border-green/20 p-4 mb-4">
+          <p class="font-bebas tracking-wide text-ink text-lg mb-1">What you'll need</p>
+          <ul class="text-sm text-body grid gap-1.5">
+            <li class="flex gap-2"><span class="text-green font-bold">✓</span> A photo of your National ID, Driver's Permit or Passport (JPG, PNG or PDF)</li>
+            <li class="flex gap-2"><span class="text-green font-bold">✓</span> Your WhatsApp number and email</li>
+            <li class="flex gap-2"><span class="text-green font-bold">✓</span> A Visa or Mastercard, or your online banking, for the registration fee</li>
+            <li class="flex gap-2"><span class="text-green font-bold">✓</span> Passport-size photo — optional, you can bring it on day one</li>
+            <li class="flex gap-2"><span class="text-green font-bold">✓</span> Textbook — only where your course requires one; we'll tell you which</li>
+          </ul>
+        </div>
+
+        <div class="grid gap-2" id="courseList" role="radiogroup" aria-label="Course">
+          <!-- Course cards. data-* mirrors /pay/aoam-pay-config.js; the dry run checks they agree. -->
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="Beginners — 31 Oct — TT$2,000" data-pay="beginners" data-reg="300" data-fee="2000" data-slug="beginners-automotive">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Beginners' Auto Mechanics</span><span class="block text-sm text-muted">6 weeks · Saturdays 9am–12pm · starts 31 Oct 2026 · from age 13</span></span><span class="font-bebas text-xl text-ink">TT$2,000</span></span></label>
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="Engine Rebuilding — 16 Jan 2027 — TT$5,000" data-pay="engine-rebuilding" data-reg="500" data-fee="5000" data-slug="engine-rebuilding">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Engine Rebuilding</span><span class="block text-sm text-muted">3 months · Saturday evenings 6–9pm · starts 16 Jan 2027</span></span><span class="font-bebas text-xl text-ink">TT$5,000</span></span></label>
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="Intro to Automotive Electricity — 6 Oct — TT$3,000" data-pay="intro-electricity" data-reg="500" data-fee="3000" data-slug="intro-automotive-electrical">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Intro to Automotive Electricity</span><span class="block text-sm text-muted">6 weeks · Tuesdays 6–9pm · starts 6 Oct 2026</span></span><span class="font-bebas text-xl text-ink">TT$3,000</span></span></label>
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="Master Elec/Electronics &amp; Diagnostics — 18 Jan 2027 — TT$6,000" data-pay="master-electrical" data-reg="500" data-fee="6000" data-slug="master-electrical-diagnostics">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Master Automotive Electrical, Electronics &amp; Diagnostics</span><span class="block text-sm text-muted">3 months · Mondays &amp; Wednesdays 6–9pm · starts 18 Jan 2027</span></span><span class="font-bebas text-xl text-ink">TT$6,000</span></span></label>
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="Hybrid &amp; Electric Training — 21 Jan 2027 — TT$6,000" data-pay="hybrid-ev" data-reg="500" data-fee="6000" data-slug="hybrid-ev-training">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Hybrid &amp; Electric Vehicle Training</span><span class="block text-sm text-muted">3 months · Thursdays 6–9pm · starts 21 Jan 2027</span></span><span class="font-bebas text-xl text-ink">TT$6,000</span></span></label>
+          <label class="card-radio block cursor-pointer"><input type="radio" name="Course" class="sr-only" value="City &amp; Guilds Level 2 Diploma — 18 Jan 2027 — TT$19,999 (exam fees not included)" data-pay="city-guilds" data-reg="1000" data-fee="19999" data-note="Exam fees not included" data-slug="city-guilds-level-2">
+            <span class="pick flex items-start gap-3 rounded-xl border-2 border-gray-300 bg-white p-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">City &amp; Guilds Level 2 Diploma</span><span class="block text-sm text-muted">18 months · 3–4 evenings a week · starts 18 Jan 2027 · exam fees not included</span></span><span class="font-bebas text-xl text-ink">TT$19,999</span></span></label>
+          <!-- E-Lab online: three courses, each with a level picker (Leonardo, 14 Oct 2026).
+               The radio carries the CHOSEN level's data-*; the buttons carry every level's. -->
+          <p class="font-bebas tracking-wider text-muted text-sm mt-2">Online · E-Lab</p>
+          <label class="card-radio elab-card block cursor-pointer" data-elab="hybrid"><input type="radio" name="Course" class="sr-only" value="Hybrid Vehicle Systems (E-Lab online) — Level 1 Basic — TT$4,500" data-pay="elab-hybrid-l1" data-reg="0" data-fee="4500" data-slug="hybrid-vehicle-systems" data-online="1">
+            <span class="pick block rounded-xl border-2 border-gray-300 bg-white p-3"><span class="flex items-start gap-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Hybrid Vehicle Systems <span class="font-semibold text-muted">· E-Lab online · </span><span data-elab-level>Level 1 Basic</span></span><span class="block text-sm text-muted">Self-paced online · start on registration · 12 weeks access per level · no registration fee · paid in full</span></span><span class="font-bebas text-xl text-ink" data-elab-price>TT$4,500</span></span>
+              <span class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3" role="group" aria-label="Hybrid Vehicle Systems level">
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="true" data-pay="elab-hybrid-l1" data-fee="4500" data-reg="0" data-label="Level 1 Basic" data-value="Hybrid Vehicle Systems (E-Lab online) — Level 1 Basic — TT$4,500">Basic<span class="block font-bebas text-lg tracking-wide">TT$4,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-hybrid-l2" data-fee="6500" data-reg="0" data-label="Level 2 Advanced" data-value="Hybrid Vehicle Systems (E-Lab online) — Level 2 Advanced — TT$6,500">Advanced<span class="block font-bebas text-lg tracking-wide">TT$6,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-hybrid-l3" data-fee="10000" data-reg="0" data-label="Level 3 Specialist" data-value="Hybrid Vehicle Systems (E-Lab online) — Level 3 Specialist — TT$10,000">Specialist<span class="block font-bebas text-lg tracking-wide">TT$10,000</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-hybrid-all" data-fee="14999" data-reg="0" data-label="All three levels" data-value="Hybrid Vehicle Systems (E-Lab online) — All three levels — TT$14,999">All 3 levels<span class="block font-bebas text-lg tracking-wide">TT$14,999</span></button>
+              </span>
+            </span></label>
+          <label class="card-radio elab-card block cursor-pointer" data-elab="electrical"><input type="radio" name="Course" class="sr-only" value="Automotive Electrical Systems (E-Lab online) — Level 1 Basic — TT$4,500" data-pay="elab-electrical-l1" data-reg="0" data-fee="4500" data-slug="automotive-electrical-systems" data-online="1">
+            <span class="pick block rounded-xl border-2 border-gray-300 bg-white p-3"><span class="flex items-start gap-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Automotive Electrical Systems <span class="font-semibold text-muted">· E-Lab online · </span><span data-elab-level>Level 1 Basic</span></span><span class="block text-sm text-muted">Self-paced online · start on registration · 12 weeks access per level · no registration fee · paid in full</span></span><span class="font-bebas text-xl text-ink" data-elab-price>TT$4,500</span></span>
+              <span class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3" role="group" aria-label="Automotive Electrical Systems level">
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="true" data-pay="elab-electrical-l1" data-fee="4500" data-reg="0" data-label="Level 1 Basic" data-value="Automotive Electrical Systems (E-Lab online) — Level 1 Basic — TT$4,500">Basic<span class="block font-bebas text-lg tracking-wide">TT$4,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-electrical-l2" data-fee="6500" data-reg="0" data-label="Level 2 Advanced" data-value="Automotive Electrical Systems (E-Lab online) — Level 2 Advanced — TT$6,500">Advanced<span class="block font-bebas text-lg tracking-wide">TT$6,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-electrical-l3" data-fee="10000" data-reg="0" data-label="Level 3 Specialist" data-value="Automotive Electrical Systems (E-Lab online) — Level 3 Specialist — TT$10,000">Specialist<span class="block font-bebas text-lg tracking-wide">TT$10,000</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-electrical-all" data-fee="14999" data-reg="0" data-label="All three levels" data-value="Automotive Electrical Systems (E-Lab online) — All three levels — TT$14,999">All 3 levels<span class="block font-bebas text-lg tracking-wide">TT$14,999</span></button>
+              </span>
+            </span></label>
+          <label class="card-radio elab-card block cursor-pointer" data-elab="diesel"><input type="radio" name="Course" class="sr-only" value="Diesel Mechanics (E-Lab online) — Level 1 Basic — TT$4,500" data-pay="elab-diesel-l1" data-reg="0" data-fee="4500" data-slug="diesel-mechanics" data-online="1">
+            <span class="pick block rounded-xl border-2 border-gray-300 bg-white p-3"><span class="flex items-start gap-3"><span class="dot mt-0.5"></span><span class="flex-1"><span class="block font-bold text-ink">Diesel Mechanics <span class="font-semibold text-muted">· E-Lab online · </span><span data-elab-level>Level 1 Basic</span></span><span class="block text-sm text-muted">Self-paced online · start on registration · 12 weeks access per level · no registration fee · paid in full</span></span><span class="font-bebas text-xl text-ink" data-elab-price>TT$4,500</span></span>
+              <span class="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3" role="group" aria-label="Diesel Mechanics level">
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="true" data-pay="elab-diesel-l1" data-fee="4500" data-reg="0" data-label="Level 1 Basic" data-value="Diesel Mechanics (E-Lab online) — Level 1 Basic — TT$4,500">Basic<span class="block font-bebas text-lg tracking-wide">TT$4,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-diesel-l2" data-fee="6500" data-reg="0" data-label="Level 2 Advanced" data-value="Diesel Mechanics (E-Lab online) — Level 2 Advanced — TT$6,500">Advanced<span class="block font-bebas text-lg tracking-wide">TT$6,500</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-diesel-l3" data-fee="10000" data-reg="0" data-label="Level 3 Specialist" data-value="Diesel Mechanics (E-Lab online) — Level 3 Specialist — TT$10,000">Specialist<span class="block font-bebas text-lg tracking-wide">TT$10,000</span></button>
+                <button type="button" class="lvl rounded-lg border-2 border-gray-300 bg-white px-2 py-2 text-center text-sm font-bold text-ink" aria-pressed="false" data-pay="elab-diesel-all" data-fee="14999" data-reg="0" data-label="All three levels" data-value="Diesel Mechanics (E-Lab online) — All three levels — TT$14,999">All 3 levels<span class="block font-bebas text-lg tracking-wide">TT$14,999</span></button>
+              </span>
+            </span></label>
+          <div class="relative flex items-start gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-3 opacity-80">
+            <span class="dot mt-0.5 opacity-40"></span><span class="flex-1"><span class="block font-bold text-ink">Automatic Transmission</span><span class="block text-sm text-muted">Not open for registration yet. Ask on WhatsApp to be told when it starts.</span></span>
+            <span class="font-bebas tracking-wider text-sm bg-yellow text-ink px-3 py-1 rounded">Coming soon</span>
+          </div>
+        </div>
+        <p class="err mt-2 hidden text-sm font-semibold text-red" id="err-course">Choose a course to continue.</p>
+
+        <button type="button" class="mt-5 w-full rounded-xl bg-red hover:bg-red-dk text-white font-bebas text-xl tracking-wider py-4 shadow-lg shadow-red/30" data-next="2">Continue to your details →</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ================= STEP 2 ================= -->
+  <section class="step bg-white rounded-2xl border border-line shadow-sm opacity-60" data-step="2">
+    <button type="button" class="step-head w-full flex items-center gap-3 px-4 py-4 text-left" data-open="2" aria-expanded="false" aria-controls="body-2" disabled>
+      <span class="num flex-none w-8 h-8 rounded-full bg-gray-300 text-white font-bebas text-lg flex items-center justify-center">2</span>
+      <span class="flex-1 min-w-0">
+        <span class="block font-bebas text-xl tracking-wide text-ink">Your details</span>
+        <span class="summary block text-sm text-muted truncate" data-summary="2">Name, WhatsApp, email and ID</span>
+      </span>
+      <span class="edit hidden text-sm font-bold text-green">Edit</span>
+    </button>
+    <div class="step-body" id="body-2"><div>
+      <div class="px-4 pb-5 grid gap-4">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="first">First name <span class="text-red">*</span></label>
+            <input id="first" name="First name" autocomplete="given-name" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter your first name.</p></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="last">Last name <span class="text-red">*</span></label>
+            <input id="last" name="Last name" autocomplete="family-name" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter your last name.</p></div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="phone">Main phone number <span class="text-red">*</span></label>
+            <input id="phone" name="Phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="868 000 0000" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter the number we can reach you on.</p></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="whatsapp">WhatsApp number <span class="text-red">*</span></label>
+            <input id="whatsapp" name="WhatsApp number" type="tel" inputmode="tel" placeholder="868 000 0000" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <label class="mt-1 flex items-center gap-2 text-xs text-muted cursor-pointer"><input type="checkbox" id="sameWa" class="w-6 h-6 accent-green"> Same as my main number</label>
+            <p class="text-xs text-muted mt-1">We confirm your seat and receipts on WhatsApp.</p>
+            <p class="err mt-1 text-sm font-semibold text-red">Enter the WhatsApp number we can reach you on.</p></div>
+        </div>
+        <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="email">Email <span class="text-red">*</span></label>
+          <input id="email" name="Email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+          <p class="err mt-1 text-sm font-semibold text-red">Enter a valid email address.</p></div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="dob">Date of birth <span class="text-red">*</span></label>
+            <input id="dob" name="Date of birth" type="date" autocomplete="bday" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter your date of birth.</p></div>
+          <div class="fld"><label id="genderLabel" class="block text-sm font-semibold text-ink mb-1">Gender <span class="text-red">*</span></label>
+            <div class="grid grid-cols-2 gap-2" role="radiogroup" aria-labelledby="genderLabel">
+              <label class="card-radio cursor-pointer"><input type="radio" name="Gender" value="Male" class="sr-only"><span class="pick flex items-center gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 font-bold text-ink"><span class="dot"></span>Male</span></label>
+              <label class="card-radio cursor-pointer"><input type="radio" name="Gender" value="Female" class="sr-only"><span class="pick flex items-center gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 font-bold text-ink"><span class="dot"></span>Female</span></label>
+            </div>
+            <p class="err mt-1 text-sm font-semibold text-red">Select your gender.</p></div>
+        </div>
+        <div class="rounded-xl border border-line p-4 grid gap-4 bg-[#fbfdfb]">
+          <p class="font-bebas tracking-wide text-ink text-lg">Home address</p>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="street">Street name and house / building number <span class="text-red">*</span></label>
+            <input id="street" name="Street" autocomplete="address-line1" required placeholder="e.g. 14 Eastern Main Road" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter your street and house number.</p></div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="town">Town / city / community <span class="text-red">*</span></label>
+              <select id="town" name="Town" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base bg-white focus:border-green focus:ring-2 focus:ring-green/20 outline-none"><option value="">Select…</option></select>
+              <input id="townOther" type="text" placeholder="Type your town or community" hidden class="mt-2 w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green outline-none">
+              <p class="err mt-1 text-sm font-semibold text-red">Choose your town or community.</p></div>
+            <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="region">County / regional corporation <span class="text-red">*</span></label>
+              <select id="region" name="Region" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base bg-white focus:border-green focus:ring-2 focus:ring-green/20 outline-none"><option value="">Select…</option></select>
+              <p class="text-xs text-muted mt-1">Picking a corporation narrows the town list; picking a town fills this in.</p>
+              <p class="err mt-1 text-sm font-semibold text-red">Choose your regional corporation.</p></div>
+          </div>
+          <input type="hidden" id="postcode" name="Postal code" value="">
+          <input type="hidden" name="Address" id="address" value="">
+        </div>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label class="block text-sm font-semibold text-ink mb-1" for="occupation">Occupation <span class="text-muted font-medium">(optional)</span></label><input id="occupation" name="Occupation" autocomplete="organization-title" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+          <div><label class="block text-sm font-semibold text-ink mb-1" for="employer">Employer <span class="text-muted font-medium">(optional)</span></label><input id="employer" name="Employer" autocomplete="organization" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+        </div>
+
+        <div class="rounded-xl border border-line p-4 grid gap-4 bg-[#fbfdfb]">
+          <p class="font-bebas tracking-wide text-ink text-lg">Identification</p>
+          <div class="fld"><label id="idTypeLabel" class="block text-sm font-semibold text-ink mb-1">ID type <span class="text-red">*</span></label>
+            <div class="grid sm:grid-cols-3 gap-2" role="radiogroup" aria-labelledby="idTypeLabel">
+              <label class="card-radio cursor-pointer"><input type="radio" name="ID type" value="National ID" class="sr-only"><span class="pick flex items-center gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 font-bold text-ink"><span class="dot"></span>National ID</span></label>
+              <label class="card-radio cursor-pointer"><input type="radio" name="ID type" value="Driver's License" class="sr-only"><span class="pick flex items-center gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 font-bold text-ink"><span class="dot"></span>Driver's License</span></label>
+              <label class="card-radio cursor-pointer"><input type="radio" name="ID type" value="Passport" class="sr-only"><span class="pick flex items-center gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 font-bold text-ink"><span class="dot"></span>Passport</span></label>
+            </div>
+            <p class="err mt-1 text-sm font-semibold text-red">Choose which ID you are using.</p></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="idnum"><span id="idnumLabel">ID number</span> <span class="text-red">*</span></label>
+            <input id="idnum" name="ID number" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="err mt-1 text-sm font-semibold text-red">Enter the number on the ID you selected.</p></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="idFile">Upload your ID <span class="text-red">*</span></label>
+            <label class="flex items-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-white p-3 cursor-pointer hover:border-green" for="idFile">
+              <span class="flex-none w-9 h-9 rounded-lg bg-green text-white flex items-center justify-center text-xl">+</span>
+              <span class="min-w-0"><span class="block font-bold text-ink text-sm" id="idFileName">Tap to upload a photo or PDF</span><span class="block text-xs text-muted">JPG, PNG, PDF or an iPhone photo (HEIC) · up to 5MB</span></span>
+              <input id="idFile" name="id_file" type="file" accept=".jpg,.jpeg,.png,.pdf,.heic,.heif,image/jpeg,image/png,image/heic,image/heif,application/pdf" required class="sr-only">
+            </label>
+            <p class="err mt-1 text-sm font-semibold text-red">Attach a clear photo or PDF of your ID (JPG, PNG or PDF, under 5MB).</p>
+            <img id="idPreview" alt="" hidden class="mt-2 max-h-40 rounded-lg border border-line">
+            <p class="mt-2 text-sm font-semibold hidden" id="ocrStatus" role="status" aria-live="polite"></p>
+            <input type="hidden" name="ID OCR check" id="ocrField" value=""></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="photoFile">Passport-size photo <span class="text-muted font-medium">(optional)</span></label>
+            <label class="flex items-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-white p-3 cursor-pointer hover:border-green" for="photoFile">
+              <span class="flex-none w-9 h-9 rounded-lg bg-green text-white flex items-center justify-center text-xl">+</span>
+              <span class="min-w-0"><span class="block font-bold text-ink text-sm" id="photoFileName">Tap to add your photo</span><span class="block text-xs text-muted">JPG, PNG or iPhone photo · or bring it on your first day</span></span>
+              <input id="photoFile" name="photo_file" type="file" accept=".jpg,.jpeg,.png,.heic,.heif,image/jpeg,image/png,image/heic,image/heif" class="sr-only">
+            </label>
+            <img id="photoPreview" alt="" hidden class="mt-2 max-h-40 rounded-lg border border-line"></div>
+        </div>
+
+        <button type="button" class="w-full rounded-xl bg-red hover:bg-red-dk text-white font-bebas text-xl tracking-wider py-4 shadow-lg shadow-red/30" data-next="3">Proceed to payment →</button>
+      </div>
+    </div></div>
+  </section>
+
+  <!-- ================= STEP 3 ================= -->
+  <section class="step bg-white rounded-2xl border border-line shadow-sm opacity-60" data-step="3">
+    <button type="button" class="step-head w-full flex items-center gap-3 px-4 py-4 text-left" data-open="3" aria-expanded="false" aria-controls="body-3" disabled>
+      <span class="num flex-none w-8 h-8 rounded-full bg-gray-300 text-white font-bebas text-lg flex items-center justify-center">3</span>
+      <span class="flex-1 min-w-0">
+        <span class="block font-bebas text-xl tracking-wide text-ink">Payment</span>
+        <span class="summary block text-sm text-muted truncate" data-summary="3">Card, bank transfer or in person</span>
+      </span>
+    </button>
+    <div class="step-body" id="body-3"><div>
+      <div class="px-4 pb-5 grid gap-4">
+
+        <!-- the order -->
+        <div class="rounded-xl border-2 border-green p-4">
+          <p class="font-bebas tracking-wide text-ink text-lg">Your order</p>
+          <label class="flex items-start gap-3 py-3 border-t border-line cursor-pointer" id="rowReg">
+            <input type="checkbox" id="chkReg" checked class="mt-0.5 w-6 h-6 accent-green flex-none">
+            <span class="flex-1 font-bold text-ink text-[15px]">Registration fee<small class="block font-medium text-muted text-xs mt-0.5">Required. Untick only if the office has waived it for you (returning students).</small></span>
+            <span class="font-bebas text-xl text-ink whitespace-nowrap" id="regAmt">TT$—</span>
+          </label>
+          <div class="py-3 border-t border-line" id="couponWrap">
+            <label class="block text-sm font-semibold text-ink mb-1" for="couponInput">Coupon code <span class="text-muted font-medium">(optional)</span></label>
+            <div class="flex gap-2">
+              <input id="couponInput" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="12" placeholder="e.g. K7M2QX9P" class="flex-1 w-full min-w-0 min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base font-mono uppercase tracking-wider focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+              <button type="button" id="couponBtn" class="min-h-[52px] px-5 rounded-lg border-2 border-green bg-white text-green font-bold disabled:opacity-50">Apply</button>
+            </div>
+            <p id="couponMsg" class="text-sm font-semibold mt-2" role="status" aria-live="polite" hidden></p>
+          </div>
+          <label class="flex items-start gap-3 py-3 border-t border-line cursor-pointer" id="rowFee">
+            <input type="checkbox" id="chkFee" checked class="mt-0.5 w-6 h-6 accent-green flex-none">
+            <span class="flex-1 font-bold text-ink text-[15px]"><span id="feeName">Course fee</span><small class="block font-medium text-muted text-xs mt-0.5" id="feeSub"></small></span>
+            <span class="font-bebas text-xl text-ink whitespace-nowrap" id="feeAmtRow">TT$—</span>
+          </label>
+          <div id="structWrap" hidden>
+            <p class="text-sm font-bold text-ink mt-2 mb-2">How will you pay the course fee?</p>
+            <div class="grid gap-2" id="structList" role="radiogroup" aria-label="How will you pay the course fee"></div>
+          </div>
+          <div class="flex justify-between items-baseline border-t-2 border-ink mt-3 pt-3 font-bebas tracking-wider text-ink" aria-live="polite"><span class="text-lg">Total today</span><span class="text-4xl" id="totalAmt">TT$—</span></div>
+          <p class="text-sm text-body mt-1" id="laterLine" hidden></p>
+          <p class="text-sm text-body mt-1">Reference: <b class="font-mono text-ink break-all" id="payRef">—</b></p>
+        </div>
+
+        <p id="zeroDue" class="hidden rounded-xl border-2 border-green bg-green-lt p-4 font-semibold text-ink">Nothing to pay today — accept the conditions below and submit.</p>
+
+        <!-- primary: card -->
+        <div class="rounded-xl border-2 border-red bg-[#fdf3f2] p-4" id="cardPay">
+          <p class="font-bebas tracking-wide text-ink text-lg">Pay by card <span class="text-muted text-sm font-inter font-semibold">· Visa or Mastercard · secure page by Fygaro</span></p>
+          <p class="text-sm text-body mt-1 mb-3">Seat confirmed the same day. We record your registration first, then take you straight to the secure payment page.</p>
+          <button type="submit" id="cardBtn" class="block w-full rounded-xl bg-red hover:bg-red-dk disabled:opacity-50 text-white font-bebas text-2xl tracking-wider py-4 shadow-lg shadow-red/30">Pay now →</button>
+          <p class="text-xs text-muted mt-2" id="cardNote" hidden>Card payment is not available for this course online — use one of the options below.</p>
+        </div>
+
+        <!-- secondary + tertiary: always visible, deliberately quieter than the card -->
+        <div id="altWrap" class="grid gap-3">
+          <p class="text-sm font-semibold text-muted px-1">Or pay another way</p>
+          <div class="grid sm:grid-cols-2 gap-2" role="radiogroup" aria-label="Other ways to pay">
+            <label class="card-radio cursor-pointer"><input type="radio" name="alt-method" value="bank" class="sr-only"><span class="pick flex items-start gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 py-2 font-bold text-ink"><span class="dot mt-1 flex-none"></span><span class="flex-1">Bank transfer<span class="block text-xs font-semibold text-muted">Republic Bank · seat confirmed once it clears</span></span></span></label>
+            <label class="card-radio cursor-pointer"><input type="radio" name="alt-method" value="person" class="sr-only"><span class="pick flex items-start gap-2 rounded-lg border-2 border-gray-300 min-h-[52px] px-3 py-2 font-semibold text-ink"><span class="dot mt-1 flex-none"></span><span class="flex-1">Pay in person<span class="block text-xs font-semibold text-muted">At the campus · you also book a drop-off slot</span></span></span></label>
+          </div>
+          <p class="err hidden mt-1 text-sm font-semibold text-red" id="err-method">Choose bank transfer or pay in person, or use the card button above.</p>
+
+          <div id="bankPay" hidden class="rounded-xl border-2 border-green bg-green-lt p-4">
+            <p class="font-bebas tracking-wide text-ink text-lg">Bank transfer</p>
+            <p class="text-sm text-body mb-3">Online banking or any Republic Bank branch. No cash. Put the <b>reference above</b> on the transfer.</p>
+            <dl class="grid gap-px bg-[#cfe0d5] border border-[#cfe0d5] rounded-lg overflow-hidden text-sm">
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Bank</dt><dd class="font-bold text-ink">Republic Bank Limited</dd></div>
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Account name</dt><dd class="font-bold text-ink text-right">Academy Of AutoMechanics Ltd</dd></div>
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Account number</dt><dd class="font-bebas text-xl text-ink tracking-wider" id="acctNo">350804096901</dd></div>
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Account type</dt><dd class="font-bold text-ink">Chequing</dd></div>
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Branch</dt><dd class="font-bold text-ink">Tunapuna</dd></div>
+              <div class="bg-white flex justify-between gap-3 px-3 py-2.5"><dt class="text-muted font-bold uppercase text-xs tracking-wide">Amount</dt><dd class="font-bebas text-xl text-ink" id="bankAmt">TT$—</dd></div>
+            </dl>
+            <button type="button" id="copyAcct" class="mt-3 w-full min-h-[48px] rounded-lg border-2 border-green bg-white text-green font-bold text-sm">Copy account number</button>
+            <div class="mt-3"><label class="block text-sm font-semibold text-ink mb-1" for="receiptFile">Transfer receipt <span class="text-muted font-medium">(optional — or WhatsApp it later)</span></label>
+              <label class="flex items-center gap-3 rounded-xl border-2 border-dashed border-gray-300 bg-white p-3 cursor-pointer hover:border-green" for="receiptFile">
+                <span class="flex-none w-9 h-9 rounded-lg bg-green text-white flex items-center justify-center text-xl">+</span>
+                <span class="min-w-0"><span class="block font-bold text-ink text-sm" id="receiptFileName">Upload a screenshot or PDF of the transfer</span><span class="block text-xs text-muted">JPG, PNG or PDF · up to 5MB</span></span>
+                <input id="receiptFile" name="receipt_file" type="file" accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf" class="sr-only">
+              </label></div>
+          </div>
+
+          <div id="personPay" hidden class="rounded-xl border-2 border-green bg-green-lt p-4">
+            <p class="font-bebas tracking-wide text-ink text-lg">Pay in person</p>
+            <p class="text-sm text-body mb-3">Linx or card at #22 Balthazar Street, Tunapuna. No cash. <b>Book a 15-minute drop-off slot</b> so someone is at the desk for you.</p>
+            <div id="calInline" role="group" aria-label="Book a 15-minute drop-off appointment" class="rounded-lg bg-white border border-line min-h-[120px]"></div>
+            <p class="text-sm mt-2"><a id="calFallback" class="text-green font-bold underline" href="#" target="_blank" rel="noopener">Booking calendar not loading? Open it in a new tab →</a></p>
+            <label class="fld flex items-start gap-3 mt-3 rounded-lg border-2 border-gray-300 bg-white p-3 cursor-pointer" id="bookedRow">
+              <input type="checkbox" id="bookedChk" class="mt-0.5 w-6 h-6 accent-green flex-none">
+              <span class="text-sm font-semibold text-ink" id="bookedText">I have booked my drop-off time.</span>
+            </label>
+            <p class="err hidden mt-1 text-sm font-semibold text-red" id="err-booked">Book a drop-off slot (or tick the box if you booked in the new tab) to continue.</p>
+          </div>
+        </div>
+
+        <!-- agreement + submit -->
+        <div class="rounded-xl border border-line p-4 grid gap-3">
+          <p class="font-bebas tracking-wide text-ink text-lg">Agreement</p>
+          <ol class="list-[lower-alpha] pl-6 text-sm text-body grid gap-1.5 marker:font-bold marker:text-green">
+            <li>Payment of fees will not vary with attendance. Students who absent themselves from the course are still liable for the full cost of the programme, which must be paid.</li>
+            <li>Students whose payments are in arrears will be debarred from attending classes and from sitting exams.</li>
+            <li>Once I have enrolled and paid the fees, I do not expect any refund, except in cases where the situation was of no fault of my own.</li>
+            <li>Should any of the above conditions not be met, I may be asked to discontinue my schooling and be held liable.</li>
+            <li>I declare that I have read the conditions outlined above and I agree to their specifications.</li>
+          </ol>
+          <div class="fld"><label class="flex items-start gap-3 rounded-lg border-2 border-gray-300 bg-[#fbfdfb] p-3 cursor-pointer" for="terms">
+              <input type="checkbox" id="terms" name="Conditions agreed" value="Yes — agreed to conditions (a) to (e)" class="mt-0.5 w-6 h-6 accent-green flex-none">
+              <span class="text-sm font-semibold text-ink">I have read conditions (a) to (e) and I agree to them.</span></label>
+            <p class="err mt-1 text-sm font-semibold text-red">Please tick to confirm you agree to the conditions.</p></div>
+          <div class="fld"><label class="block text-sm font-semibold text-ink mb-1" for="sig">Signature — type your full name <span class="text-red">*</span></label>
+            <input id="sig" name="Signature" autocomplete="off" placeholder="Your full name, as on your ID" required class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base focus:border-green focus:ring-2 focus:ring-green/20 outline-none">
+            <p class="text-xs text-muted mt-1">Typing your name here is your signature. Today's date is recorded with it.</p>
+            <p class="err mt-1 text-sm font-semibold text-red">Type your full name to sign.</p></div>
+        </div>
+
+        <div class="rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 p-4 grid gap-3">
+          <p class="font-bebas tracking-wide text-ink text-lg">Additional information <span class="text-muted text-sm font-inter font-semibold">· optional</span></p>
+          <div><label class="block text-sm font-semibold text-ink mb-1" for="source">How did you hear about us?</label>
+            <select id="source" name="How did you hear about us" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base bg-white focus:border-green outline-none">
+              <option value="">Select…</option><option>Social Media</option><option>Word of Mouth</option><option>Search Engine</option><option>Referral</option><option>Other</option>
+            </select></div>
+          <div id="refWrap" hidden class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block text-sm font-semibold text-ink mb-1" for="refname">Who referred you?</label><input id="refname" name="Referral name" autocomplete="off" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+            <div><label class="block text-sm font-semibold text-ink mb-1" for="refphone">Their phone <span class="text-muted font-medium">(optional)</span></label><input id="refphone" name="Referral phone" type="tel" autocomplete="off" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+          </div>
+          <p class="text-sm font-semibold text-ink mt-1">Know someone who'd be interested in our courses?</p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div><label class="block text-sm font-semibold text-ink mb-1" for="friendname">Their name</label><input id="friendname" name="Interested contact name" autocomplete="off" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+            <div><label class="block text-sm font-semibold text-ink mb-1" for="friendphone">Their phone</label><input id="friendphone" name="Interested contact phone" type="tel" autocomplete="off" class="w-full min-h-[52px] rounded-lg border-2 border-gray-300 px-3 text-base outline-none focus:border-green"></div>
+          </div>
+        </div>
+
+        <div class="rounded-lg bg-[#faf3dd] border border-gold text-[#6b5a1c] text-sm p-3" id="finalNote">Nothing is charged on this form. Pay by the method you chose using your reference, then submit.</div>
+        <button type="submit" id="submitBtn" class="w-full rounded-xl bg-green hover:bg-green-2 text-white font-bebas text-xl tracking-wider py-4 shadow-lg shadow-green/30">Submit registration →</button>
+      </div>
+    </div></div>
+  </section>
+</form>
+</main>
+
+<footer class="bg-green-dk text-green-200 text-center text-sm py-6 px-4 leading-7">
+  Academy of AutoMechanics · #22 Balthazar Street, Tunapuna, Trinidad &amp; Tobago<br>
+  1-868-332-1272 · <a class="text-white" href="https://academyofautomechanics.com">academyofautomechanics.com</a>
+</footer>
+
+<!-- The checkout's config + engine: prices, plans, schedules, card links. The date in the
+     query string means a browser keeps them for at most a day, so a price or date change
+     shows up by the next day without anyone bumping a version number. -->
+<script>(function(){var d=new Date().toISOString().slice(0,10);["/register-preview/aoam-pay-config.js","/register-preview/aoam-pay-lib.js"].forEach(function(u){document.write('<script src="'+u+'?d='+d+'"><\/script>');});})();</script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var form = $("regForm");
+  var CFG = window.AOAM_CONFIG || null, LIB = window.AOAM || null;
+  /* Cal.com event for in-person payment drop-offs: 15 minutes, at the campus,
+     separate from the consultation event. Create it once in Cal.com and keep
+     the slug here. */
+  var CAL_LINK = "academyofautomechanics/in-person-tuition-payment";
+  var money = function (n) { return "TT$" + Number(n).toLocaleString("en-US"); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+
+  /* ---------------------------------------------------------------------
+     STATE — one object, one renderer.
+     Text inputs live in the DOM and are never re-rendered (so nothing is
+     lost when a step collapses); `state` holds the choices the page derives
+     things from, and is mirrored to sessionStorage so a reload — or coming
+     back from the Fygaro tab — restores everything except files.
+     ------------------------------------------------------------------- */
+  var state = { step: 1, done: {}, course: "", reg: true, fee: true, structure: "full", method: "card", alt: "", booked: false, coupon: "" };
+  var TEXT_IDS = ["first", "last", "phone", "whatsapp", "email", "dob", "street", "town", "townOther", "region", "postcode", "idnum", "occupation", "employer", "source", "refname", "refphone", "friendname", "friendphone", "sig"];
+  function save() {
+    try {
+      var t = {}; TEXT_IDS.forEach(function (id) { t[id] = $(id).value; });
+      ["Gender", "ID type"].forEach(function (n) { var r = form.querySelector('input[name="' + n + '"]:checked'); t[n] = r ? r.value : ""; });
+      sessionStorage.setItem("aoam_reg", JSON.stringify({ state: state, text: t }));
+    } catch (e) {}
+  }
+  function restore() {
+    try {
+      var d = JSON.parse(sessionStorage.getItem("aoam_reg") || "null"); if (!d) return;
+      Object.assign(state, d.state || {}); state.booked = false;
+      TEXT_IDS.forEach(function (id) { if (d.text && d.text[id]) $(id).value = d.text[id]; });
+      ["Gender", "ID type"].forEach(function (n) { var r = d.text && form.querySelector('input[name="' + n + '"][value="' + (d.text[n] || "").replace(/"/g, "") + '"]'); if (r) r.checked = true; });
+      var c = form.querySelector('input[name="Course"][value="' + state.course.replace(/"/g, "&quot;") + '"]'); if (c) c.checked = true;
+      /* an E-Lab level lives on a button, not on the radio's default value */
+      if (!c) form.querySelectorAll(".elab-card").forEach(function (card) {
+        card.querySelectorAll(".lvl").forEach(function (b) { if (b.getAttribute("data-value") === state.course) { applyLevel(card, b); card.querySelector('input[name="Course"]').checked = true; } });
+      });
+      fillTowns(d.text && d.text.town); composeAddress();
+      $("refWrap").hidden = $("source").value !== "Referral";
+      var it = form.querySelector('input[name="ID type"]:checked'); if (it) $("idnumLabel").textContent = ID_LABELS[it.value] || "ID number";
+      /* files cannot be restored: a completed step 2 goes back to open */
+      if (state.done[2] && !$("idFile").files.length) { delete state.done[2]; delete state.done[3]; if (state.step > 2) state.step = 2; }
+    } catch (e) {}
+  }
+
+  /* ---------- course + money ---------- */
+  function courseInfo() {
+    var r = form.querySelector('input[name="Course"]:checked'); if (!r) return null;
+    var reg = Number(r.getAttribute("data-reg") || 500), fee = r.getAttribute("data-fee") ? Number(r.getAttribute("data-fee")) : null;
+    var payId = r.getAttribute("data-pay") || "";
+    var c = payId && CFG && (CFG.courses || []).filter(function (x) { return x.id === payId; })[0];
+    var structures = (c && LIB) ? (c.structures || ["full"]).filter(function (id) { return id !== "custom" && CFG.structures[id]; }) : ["full"];
+    var pick = r.parentNode.querySelector(".pick .font-bold");
+    return { value: r.value, reg: reg, fee: fee, note: r.getAttribute("data-note") || "", payId: payId, course: c || null,
+      name: pick ? pick.textContent : r.value, slug: r.getAttribute("data-slug") || "", structures: structures };
+  }
+  function scheduleFor(info, sid) {
+    if (!info || !info.fee) return [];
+    if (LIB && info.course) return LIB.tuitionSchedule(info.payId, sid);
+    return [{ code: "FULL", label: "Course fee", due: "", amount: info.fee }];
+  }
+  function when(iso) { return iso && LIB ? LIB.longDate(iso) : "the course start date"; }
+  function structureWords(info, sid) {
+    var rows = scheduleFor(info, sid); if (!rows.length) return "";
+    if (rows.length === 1) return money(rows[0].amount) + " today.";
+    if (rows.length === 2) return money(rows[0].amount) + " today, then " + money(rows[1].amount) + " on " + when(rows[1].due) + ".";
+    var same = rows.filter(function (r) { return Math.abs(r.amount - rows[0].amount) < 0.005; }).length, last = rows[rows.length - 1];
+    return money(rows[0].amount) + " today, then " + money(rows[0].amount) + " a week (" + (same - 1) + " more)" + (rows.length > same ? ", last " + money(last.amount) + " on " + when(last.due) : "") + ". Total " + money(info.fee) + ".";
+  }
+  /* Two characters derived from the ID number, but NOT the ID number: the
+     reference travels to Fygaro's logs, the bank narrative and the student's
+     browser history, and real ID digits do not belong in any of them. A
+     checksum over the whole string still differs for two siblings, which is
+     all the reference needs it for. */
+  function idSuffix(raw) {
+    var v = String(raw || "").replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    if (!v) return "";
+    var h = 5381;
+    for (var i = 0; i < v.length; i++) h = ((h * 33) ^ v.charCodeAt(i)) >>> 0;
+    var A = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return A[(h >>> 5) % 36] + A[h % 36];
+  }
+  function payRef(codes) {
+    var d = new Date(), digits = ($("whatsapp").value || $("phone").value).replace(/\D/g, "");
+    if (digits.length < 7 || !codes.length) return "";
+    /* initials + a two-character checksum of the ID keep two people registered
+       from one phone on the same day (a parent and two children) apart */
+    var who = (($("first").value.trim()[0] || "") + ($("last").value.trim()[0] || "")).toUpperCase().replace(/[^A-Z]/g, "") +
+      idSuffix($("idnum").value);
+    return "AOAM-R" + d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0") + "-" + digits.slice(-7) + (who ? "-" + who : "") + "-" + codes.join("-");
+  }
+  function calc() {
+    var info = courseInfo(); if (!info) return null;
+    if (info.structures.indexOf(state.structure) === -1) state.structure = info.structures[0];
+    if (!info.fee) state.fee = false;
+    var rows = state.fee ? scheduleFor(info, state.structure) : [];
+    var codes = []; if (state.reg && info.reg) codes.push("REG"); if (rows.length) codes.push(rows[0].code);
+    var later = rows.slice(1);
+    return { info: info, rows: rows, today: (state.reg ? info.reg : 0) + (rows.length ? rows[0].amount : 0), later: later, codes: codes, ref: payRef(codes),
+      structureLabel: (CFG && CFG.structures[state.structure] || { label: "In full" }).label,
+      laterText: later.length ? (later.length === 1 ? money(later[0].amount) + " on " + when(later[0].due) : later.length + " more payments, " + money(later[0].amount) + " from " + when(later[0].due) + " to " + when(later[later.length - 1].due)) : "",
+      allInOne: state.reg && rows.length === 1 && rows[0].code === "FULL" };
+  }
+
+  /* ---------- render ---------- */
+  function drawStructures(info) {
+    var wrap = $("structWrap");
+    if (!info || !info.fee || !state.fee || info.structures.length < 2) { wrap.hidden = true; return; }
+    wrap.hidden = false;
+    $("structList").innerHTML = info.structures.map(function (sid) {
+      var st = CFG.structures[sid];
+      return '<label class="card-radio block cursor-pointer"><input type="radio" name="structure-choice" class="sr-only" data-sid="' + sid + '"' + (sid === state.structure ? " checked" : "") + '>' +
+        '<span class="pick flex items-start gap-3 rounded-lg border-2 border-gray-300 p-3"><span class="dot mt-0.5"></span><span><span class="block font-bold text-ink">' + esc(st.label) + '</span><span class="block text-sm text-muted">' + esc(structureWords(info, sid)) + '</span></span></span></label>';
+    }).join("");
+    Array.prototype.forEach.call($("structList").querySelectorAll("input"), function (r) {
+      r.addEventListener("change", function () { state.structure = r.getAttribute("data-sid"); render(); });
+    });
+  }
+  function cardLink(o) {
+    var fy = CFG && CFG.payments && CFG.payments.fygaro;
+    var on = fy && fy.enabled && (CFG.payments.methods || []).indexOf("fygaro") !== -1;
+    if (!on || !o || o.today <= 0) return "";
+    var c = o.info.course, url = "";
+    var regOnly = state.reg && !o.rows.length;
+    if (o.allInOne && c && c.payFull && c.payFull.url && c.payFull.amount === o.today) url = c.payFull.url + "?";
+    else if (regOnly && c && c.payReg && c.payReg.url && c.payReg.amount === o.today) url = c.payReg.url + "?";
+    else if (fy.buttonUrl) url = fy.buttonUrl + "?amount=" + o.today.toFixed(2) + "&";
+    if (!url) return "";
+    var q = new URLSearchParams();
+    if (o.ref) q.set("client_reference", o.ref);
+    /* The reference already identifies the registration, so the student's
+       name is not sent: client_note lands in Fygaro's logs and in the
+       browser history of a shared phone. Course, amount and reference are
+       what the office needs to reconcile. */
+    q.set("client_note", o.info.name + " — " + money(o.today) + " today (" + (state.reg && o.info.reg ? "registration" : "") + (state.reg && o.info.reg && o.rows.length ? " + " : "") + (o.rows.length ? "course fee, " + o.structureLabel.toLowerCase() : "") + ")" + (o.ref ? " — " + o.ref : ""));
+    return url + q.toString();
+  }
+  function render() {
+    var o = calc(), info = o && o.info;
+    /* order */
+    /* E-Lab online: no registration fee, no coupon, tuition paid in full today */
+    var online = !!(info && info.reg === 0 && info.fee);
+    if (online) { state.fee = true; if (o) { o = calc(); } }
+    $("rowReg").classList.toggle("hidden", online); $("couponWrap").hidden = online;
+    $("chkFee").disabled = online;
+    $("regAmt").textContent = info ? (state.coupon ? "Waived" : money(info.reg)) : "TT$—";
+    $("chkReg").disabled = !!state.coupon;
+    if (state.coupon) $("couponInput").value = state.coupon;
+    $("couponInput").readOnly = !!state.coupon; $("couponBtn").textContent = state.coupon ? "Remove" : "Apply";
+    $("feeName").textContent = info ? "Course fee — " + info.name : "Course fee";
+    $("feeSub").textContent = !info ? "" : online ? ("Paid in full on registration — " + money(info.fee) + ". Your E-Lab login follows once payment is matched. No registration fee.") : info.fee ? ("In full " + money(info.fee) + "." + (info.note ? " " + info.note + "." : "")) : "Confirmed by the office — not charged here.";
+    $("feeAmtRow").textContent = info && info.fee ? money(info.fee) : "TT$—";
+    $("chkFee").disabled = online || !(info && info.fee);
+    $("chkReg").checked = state.reg; $("chkFee").checked = state.fee && !!(info && info.fee);
+    $("rowReg").classList.toggle("opacity-50", !state.reg); $("rowFee").classList.toggle("opacity-50", !state.fee);
+    drawStructures(info);
+    var total = o ? money(o.today) : "TT$—";
+    $("totalAmt").textContent = total; $("bankAmt").textContent = total;
+    $("laterLine").hidden = !(o && o.later.length);
+    if (o && o.later.length) $("laterLine").innerHTML = "<b>Later:</b> " + esc(o.laterText) + ". We remind you before each date.";
+    $("payRef").textContent = o && o.ref ? o.ref : o && o.today === 0 ? "none needed — nothing to pay today" : "shown once your WhatsApp number is in";
+    /* card */
+    var link = cardLink(o);
+    $("cardBtn").disabled = !link;
+    $("cardBtn").classList.toggle("opacity-50", !link);
+    /* The link travels with the POST so submit.php can hand it to the thank-you
+       page. Only when card is the chosen method — a bank payer must never land
+       on a card button. */
+    $("payLinkField").value = (link && state.method === "card") ? link : "";
+    /* Short CTA, but the amount stays on the button: a payment button that
+       hides what it is about to charge is how disputes start. */
+    $("cardBtn").textContent = o ? "Submit & pay " + money(o.today) + " by card →" : "Submit & pay by card →";
+    $("cardNote").hidden = !!link || !o;
+    /* a waived fee with no course fee today leaves nothing to pay: no payment method to pick */
+    var nothingDue = !!o && o.today === 0;
+    $("cardPay").classList.toggle("hidden", nothingDue); $("altWrap").classList.toggle("hidden", nothingDue); $("zeroDue").classList.toggle("hidden", !nothingDue);
+    /* alternatives — always on screen now, so the student can see all three
+       ways to pay without hunting for a checkbox */
+    $("bankPay").hidden = state.alt !== "bank"; $("personPay").hidden = state.alt !== "person";
+    if (state.alt === "person") loadCal(o);
+    /* what the office receives */
+    $("feeField").value = info ? (state.reg ? String(info.reg) : "0") : "";
+    $("waivedField").value = info && !state.reg ? (state.coupon ? "Yes — coupon " + state.coupon : "Yes — student says the office waived it") : "No";
+    $("tuitionField").value = info && info.fee ? String(info.fee) : "";
+    $("structField").value = o && o.rows.length ? o.structureLabel : (info && info.fee ? "Course fee not paid today" : "");
+    $("totalField").value = o ? String(o.today) : "";
+    $("refField").value = o ? o.ref : "";
+    $("schedField").value = o ? (money(o.today) + " today" + (o.later.length ? "; then " + o.later.map(function (r) { return money(r.amount) + " on " + r.due; }).join(", ") : "")) : "";
+    $("slugField").value = info ? info.slug : "";
+    $("couponField").value = state.coupon; $("courseIdField").value = info ? info.payId : "";
+    var method = state.method === "alt" ? state.alt : "card";
+    $("pmField").value = nothingDue ? "Nothing due today" + (state.coupon ? " — registration fee waived by coupon " + state.coupon : "") : (method === "bank" ? "Bank transfer — Republic Bank" : method === "person" ? "In person — Linx/card at the campus" + (state.booked ? " — drop-off booked" : " — NOT yet booked") : "Card online — Fygaro") + " — " + (o && o.ref ? o.ref : "no reference");
+    $("ackField").value = o ? "Yes — " + $("schedField").value + " — " + o.structureLabel + ($("waivedField").value !== "No" ? " — REGISTRATION FEE WAIVED (" + (state.coupon ? "coupon " + state.coupon : "student claims") + ")" : "") + " — ref " + (o.ref || "none") : "";
+    $("bookedField").value = state.booked ? "Yes" : (state.alt === "person" ? "No" : "");
+    /* summaries + progress */
+    var sum = document.querySelector('[data-summary="1"]'); sum.textContent = info ? info.name + " · " + (o ? money(o.today) + " today" : "") : "";
+    document.querySelector('[data-summary="2"]').textContent = state.done[2] ? ($("first").value + " " + $("last").value).trim() + " · " + $("phone").value + " · " + $("email").value : "Name, phone, email, address and ID";
+    save();
+  }
+
+  /* ---------- accordion ---------- */
+  function openStep(n) {
+    state.step = n;
+    document.querySelectorAll(".step").forEach(function (s) {
+      var k = Number(s.getAttribute("data-step")), head = s.querySelector(".step-head"), reachable = k === 1 || state.done[k - 1] || state.done[k];
+      s.classList.toggle("is-open", k === n);
+      s.classList.toggle("opacity-60", !reachable);
+      head.disabled = !reachable;
+      head.setAttribute("aria-expanded", k === n ? "true" : "false");
+      var body = s.querySelector(".step-body");
+      if ("inert" in body) body.inert = k !== n; else body.setAttribute("aria-hidden", String(k !== n));
+      s.querySelector(".num").className = "num flex-none w-8 h-8 rounded-full font-bebas text-lg flex items-center justify-center " + (state.done[k] && k !== n ? "bg-green text-white" : k === n ? "bg-green text-white" : "bg-gray-300 text-white");
+      s.querySelector(".num").textContent = state.done[k] && k !== n ? "✓" : String(k);
+      var e = s.querySelector(".edit"); if (e) e.classList.toggle("hidden", !(state.done[k] && k !== n));
+    });
+    document.querySelectorAll("#progress li").forEach(function (li) { var k = Number(li.getAttribute("data-p")); li.className = k <= n ? "text-green" : "text-gray-400"; });
+    $("bar").style.width = (n / 3 * 100) + "%";
+    render();
+    /* The steps above the target collapse, so measuring now would land
+       mid-page. Collapse them without animation, measure against that final
+       layout, then scroll — no timers, no transitionend to wait for. The
+       opening step still animates. */
+    var target = document.querySelector('.step[data-step="' + n + '"]');
+    var closing = Array.prototype.slice.call(document.querySelectorAll(".step:not(.is-open) .step-body"));
+    closing.forEach(function (b) { b.style.transition = "none"; });
+    void document.body.offsetHeight;                       // force the collapsed layout; the opening step still animates
+    var sticky = document.querySelector(".sticky").offsetHeight + 12;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - sticky;
+    window.scrollTo(0, top);                                // instant: nothing else can move it afterwards
+    requestAnimationFrame(function () { closing.forEach(function (b) { b.style.transition = ""; }); });
+    target.querySelector(".step-head").focus({ preventScroll: true });   // keyboard and screen-reader users land on the step
+  }
+  document.querySelectorAll(".step-head").forEach(function (h) { h.addEventListener("click", function () { openStep(Number(h.getAttribute("data-open"))); }); });
+  document.querySelectorAll("[data-next]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var to = Number(b.getAttribute("data-next"));
+      if (validate(to - 1)) { state.done[to - 1] = true; openStep(to); }
+    });
+  });
+
+  /* ---------- validation, one step at a time ---------- */
+  var REDUCE = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function bad(id, isBad) {
+    var el = $(id), fld = el.closest(".fld") || el;
+    fld.classList.toggle("is-bad", isBad);
+    el.setAttribute("aria-invalid", String(isBad));
+    var msg = fld.querySelector(".err");
+    if (msg) { if (!msg.id) msg.id = id + "-err"; if (isBad) el.setAttribute("aria-describedby", msg.id); else el.removeAttribute("aria-describedby"); }
+    return isBad;
+  }
+  function validate(step) {
+    var fails = [];
+    if (step === 1) {
+      var ok = !!form.querySelector('input[name="Course"]:checked');
+      $("err-course").classList.toggle("hidden", ok); if (!ok) fails.push("courseList");
+    }
+    if (step === 2) {
+      if (bad("first", $("first").value.trim().length < 2)) fails.push("first");
+      if (bad("last", $("last").value.trim().length < 2)) fails.push("last");
+      if (bad("phone", $("phone").value.replace(/\D/g, "").length < 7)) fails.push("phone");
+      if (bad("whatsapp", $("whatsapp").value.replace(/\D/g, "").length < 7)) fails.push("whatsapp");
+      if (bad("email", !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("email").value.trim()))) fails.push("email");
+      if (bad("dob", !$("dob").value)) fails.push("dob");
+      if (bad("street", $("street").value.trim().length < 3)) fails.push("street");
+      if (bad("town", !townValue())) fails.push("town");
+      if (bad("region", !$("region").value)) fails.push("region");
+      composeAddress();
+      var g = form.querySelector('input[name="Gender"]:checked'); form.querySelector('input[name="Gender"]').closest(".fld").classList.toggle("is-bad", !g); if (!g) fails.push("first");
+      var t = form.querySelector('input[name="ID type"]:checked'); form.querySelector('input[name="ID type"]').closest(".fld").classList.toggle("is-bad", !t); if (!t) fails.push("idnum");
+      if (bad("idnum", $("idnum").value.trim().length < 3)) fails.push("idnum");
+      var f = $("idFile").files[0];
+      if (bad("idFile", !f || f.size > 5 * 1024 * 1024 || !(/^(image\/(jpeg|png|heic|heif)|application\/pdf)$/.test(f.type) || isHeic(f)))) fails.push("idFile");
+    }
+    if (step === 3) {
+      /* no card link for this course: the student must actively pick one of the
+         other two rather than submitting as "Card online" with nowhere to pay */
+      var dueNow = calc();
+      if (state.method === "card" && !cardLink(dueNow)) state.method = "alt";
+      var noMethod = state.method === "alt" && !state.alt && !(dueNow && dueNow.today === 0);
+      $("err-method").classList.toggle("hidden", !noMethod);
+      if (noMethod) fails.push("altWrap");   // altWrap exists; the removed toggle did not
+      var needBooking = state.method === "alt" && state.alt === "person" && !state.booked && !$("bookedChk").checked;
+      $("err-booked").classList.toggle("hidden", !needBooking); if (needBooking) fails.push("personPay");
+      if (bad("terms", !$("terms").checked)) fails.push("terms");
+      if (bad("sig", $("sig").value.trim().length < 3)) fails.push("sig");
+    }
+    if (fails.length) {
+      var el = $(fails[0]);
+      $("formAlert").textContent = fails.length + " field" + (fails.length > 1 ? "s need" : " needs") + " your attention.";
+      if (el) { if (el.focus) el.focus({ preventScroll: true }); el.scrollIntoView({ behavior: REDUCE ? "auto" : "smooth", block: "center" }); }
+    } else { $("formAlert").textContent = ""; }
+    return !fails.length;
+  }
+
+  /* ---------- Cal.com (in-person drop-off) ----------
+     Loaded only when the option is chosen. Inline embed, prefilled from the
+     form; a successful booking flips `state.booked` and the hidden field. */
+  var calLoaded = false;
+  function loadCal(o) {
+    var notes = (o && o.ref ? o.ref + " — " : "") + ($("first").value + " " + $("last").value).trim() + " — " + (o ? money(o.today) : "") + " in person";
+    var q = new URLSearchParams({ name: ($("first").value + " " + $("last").value).trim(), email: $("email").value.trim(), notes: notes });
+    $("calFallback").href = "https://cal.com/" + CAL_LINK + "?" + q.toString();
+    if (calLoaded) return; calLoaded = true;
+    (function (C, A, L) { var p = function (a, ar) { a.q.push(ar); }; var d = C.document; C.Cal = C.Cal || function () { var cal = C.Cal, ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { var api = function () { p(api, arguments); }, namespace = ar[1]; api.q = api.q || []; typeof namespace === "string" ? (cal.ns[namespace] = cal.ns[namespace] || api) && p(cal.ns[namespace], ar) && p(cal, ["initNamespace", namespace]) : p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    Cal("init", { origin: "https://cal.com" });
+    Cal("inline", { elementOrSelector: "#calInline", calLink: CAL_LINK, layout: "month_view", config: { name: q.get("name"), email: q.get("email"), notes: notes, theme: "light" } });
+    Cal("ui", { styles: { branding: { brandColor: "#145e2e" } }, hideEventTypeDetails: false });
+    Cal("on", { action: "bookingSuccessful", callback: function (e) {
+      state.booked = true; $("bookedChk").checked = true;
+      var when = e && e.detail && e.detail.data && e.detail.data.date ? new Date(e.detail.data.date).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short" }) : "";
+      $("bookedText").textContent = "Drop-off booked" + (when ? " for " + when : "") + " ✓";
+      $("bookedField").value = "Yes" + (when ? " — " + when : ""); render();
+    } });
+  }
+
+  /* ---------- wiring ---------- */
+  form.querySelectorAll('input[name="Course"]').forEach(function (r) { r.addEventListener("change", function () {
+    state.course = r.value; state.reg = true; state.fee = true; state.structure = "full"; $("err-course").classList.add("hidden");
+    state.coupon = ""; $("couponInput").value = ""; $("couponMsg").hidden = true;   // a code may be tied to one course
+    if (state.done[1]) { delete state.done[2]; delete state.done[3]; }   // a new course re-opens the later steps
+    render();
+  }); });
+  /* E-Lab level picker: the button's data-* becomes the radio's, then the
+     radio is selected so the ordinary Course change handler runs. The value
+     string is what gets saved/restored and what the office sees. */
+  function applyLevel(card, btn) {
+    var r = card.querySelector('input[name="Course"]');
+    r.value = btn.getAttribute("data-value"); r.setAttribute("value", btn.getAttribute("data-value"));
+    ["data-pay", "data-fee", "data-reg"].forEach(function (a) { r.setAttribute(a, btn.getAttribute(a)); });
+    card.querySelector("[data-elab-level]").textContent = btn.getAttribute("data-label");
+    card.querySelector("[data-elab-price]").textContent = money(Number(btn.getAttribute("data-fee")));
+    card.querySelectorAll(".lvl").forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+  }
+  form.querySelectorAll(".elab-card").forEach(function (card) {
+    card.querySelectorAll(".lvl").forEach(function (btn) {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        applyLevel(card, btn);
+        var r = card.querySelector('input[name="Course"]');
+        if (!r.checked) { r.checked = true; }
+        r.dispatchEvent(new Event("change", { bubbles: true }));
+      });
+    });
+  });
+  $("chkReg").addEventListener("change", function () { state.reg = this.checked; render(); });
+  $("chkFee").addEventListener("change", function () { state.fee = this.checked; render(); });
+
+  /* ---------- coupon: waives the registration fee only. This check is a
+     convenience for the student; submit.php redeems the code and is the
+     control, so nothing here can waive a fee on its own. ---------- */
+  function couponMsg(text, good) {
+    var m = $("couponMsg"); m.hidden = !text; m.textContent = text;
+    m.className = "text-sm font-semibold mt-2 " + (good ? "text-green" : "text-red");
+  }
+  $("couponBtn").addEventListener("click", function () {
+    if (state.coupon) { state.coupon = ""; state.reg = true; $("couponInput").value = ""; couponMsg(""); render(); return; }
+    var info = courseInfo(), code = $("couponInput").value.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    if (!info || !code) { couponMsg("Invalid or expired coupon code.", false); return; }
+    $("couponBtn").disabled = true;
+    fetch("/register/coupon-check.php", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code: code, course_id: info.payId }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return r.ok || d.error ? d : { error: "Couldn’t check the code right now — try again, or submit without it." }; }); })
+      .then(function (d) {
+        if (d.ok) { state.coupon = code; state.reg = false; couponMsg("Coupon applied! Registration fee waived.", true); }
+        else couponMsg(d.error || "Invalid or expired coupon code.", false);
+        render();
+      })
+      .catch(function () { couponMsg("Couldn’t check the code — check your connection and try again.", false); })
+      .then(function () { $("couponBtn").disabled = false; });
+  });
+  $("couponInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); $("couponBtn").click(); } });
+  form.querySelectorAll('input[name="alt-method"]').forEach(function (r) { r.addEventListener("change", function () { state.alt = r.value; state.method = "alt"; render(); }); });
+  $("bookedChk").addEventListener("change", function () { state.booked = this.checked; render(); });
+  $("cardBtn").addEventListener("click", function () { state.method = "card"; state.alt = ""; form.querySelectorAll('input[name="alt-method"]').forEach(function (r) { r.checked = false; }); render(); });   /* then the button submits the form — payment comes after the registration is recorded */
+  ["phone", "whatsapp", "first", "last", "email", "idnum"].forEach(function (id) { $(id).addEventListener("input", function () { render(); }); });
+  $("sameWa").addEventListener("change", function () { if (this.checked) { $("whatsapp").value = $("phone").value; render(); } });
+  $("phone").addEventListener("input", function () { if ($("sameWa").checked) $("whatsapp").value = $("phone").value; });
+
+  /* ---------- address: region → town, street as text ----------
+     Trinidad & Tobago's 14 municipal corporations plus Tobago, with their
+     main towns and villages. There is no public GeoTT dropdown API to call;
+     if one is provisioned, swap REGIONS for a fetch and keep the same shape. */
+  var REGIONS = {
+    "Port of Spain": ["Port of Spain", "Woodbrook", "St James", "Belmont", "Newtown", "St Clair", "Cascade", "St Ann's", "Sea Lots"],
+    "Diego Martin": ["Diego Martin", "Petit Valley", "Westmoorings", "Carenage", "Glencoe", "Cocorite", "Maraval", "Four Roads", "Patna Village", "Chaguaramas"],
+    "San Juan–Laventille": ["San Juan", "Laventille", "Barataria", "Morvant", "Santa Cruz", "El Socorro", "Aranguez", "Petit Bourg", "Beetham Gardens", "Cantaro"],
+    "Tunapuna–Piarco": ["Tunapuna", "St Augustine", "Curepe", "St Joseph", "Trincity", "Tacarigua", "Arouca", "Piarco", "Valsayn", "D'Abadie", "Macoya", "Mt Hope", "Champs Fleurs", "Five Rivers", "Maracas Valley", "Lopinot", "Blanchisseuse"],
+    "Arima": ["Arima", "Malabar", "Pinto", "Calvary Hill", "O'Meara", "Santa Rosa", "Tumpuna"],
+    "Chaguanas": ["Chaguanas", "Enterprise", "Felicity", "Edinburgh", "Longdenville", "Charlieville", "Cunupia", "Lange Park", "Montrose", "Carlsen Field"],
+    "Couva–Tabaquite–Talparo": ["Couva", "California", "Point Lisas", "Claxton Bay", "Freeport", "Gran Couva", "Carapichaima", "Waterloo", "Chase Village", "Tabaquite", "Talparo", "Preysal", "Flanagin Town"],
+    "Sangre Grande": ["Sangre Grande", "Valencia", "Toco", "Matelot", "Cumuto", "Manzanilla", "Guaico", "Coalmine", "Wallerfield", "Fishing Pond"],
+    "San Fernando": ["San Fernando", "Marabella", "Vistabella", "Gulf View", "Cocoyea", "Pleasantville", "Les Efforts", "Mon Repos"],
+    "Princes Town": ["Princes Town", "Moruga", "Tableland", "New Grant", "Indian Walk", "Cedar Hill", "St Mary's", "Barrackpore"],
+    "Penal–Debe": ["Penal", "Debe", "Wellington", "Gandhi Village", "San Francique", "Quinam", "Monkey Town"],
+    "Siparia": ["Siparia", "Fyzabad", "La Brea", "Vessigny", "Erin", "Palo Seco", "Los Bajos", "Santa Flora", "Avocat"],
+    "Point Fortin": ["Point Fortin", "Cap-de-Ville", "Fanny Village", "Techier Village", "Egypt Village", "Newlands"],
+    "Mayaro–Rio Claro": ["Mayaro", "Rio Claro", "Guayaguayare", "Ecclesville", "Biche", "Navet", "Plaisance"],
+    "Tobago": ["Scarborough", "Bon Accord", "Canaan", "Crown Point", "Roxborough", "Plymouth", "Charlotteville", "Speyside", "Buccoo", "Signal Hill", "Bacolet", "Mason Hall", "Moriah", "Castara", "Black Rock", "Lambeau"]
+  };
+  var OTHER = "Other (type it in)";
+  /* Street → Town → Corporation, the TTPost order. Town lists every community
+     grouped by corporation until a corporation is chosen, then narrows to it;
+     choosing a town fills the corporation in. */
+  $("region").innerHTML = '<option value="">Select…</option>' + Object.keys(REGIONS).map(function (r) { return '<option>' + esc(r) + '</option>'; }).join("");
+  function fillTowns(keep) {
+    var r = $("region").value, t = $("town"), html = '<option value="">Select…</option>';
+    (r ? [r] : Object.keys(REGIONS)).forEach(function (g) {
+      html += '<optgroup label="' + esc(g) + '">' + REGIONS[g].map(function (x) { return '<option data-region="' + esc(g) + '">' + esc(x) + '</option>'; }).join("") + '</optgroup>';
+    });
+    html += '<option value="' + OTHER + '">' + OTHER + '</option>';
+    t.innerHTML = html;
+    if (keep && [].slice.call(t.options).some(function (o) { return o.value === keep; })) t.value = keep;
+    $("townOther").hidden = t.value !== OTHER;
+  }
+  function townValue() { return $("town").value === OTHER ? $("townOther").value.trim() : $("town").value; }
+  function composeAddress() {
+    $("address").value = [$("street").value.trim(), townValue(), $("region").value, $("postcode").value.trim() ? "Postal code " + $("postcode").value.trim() : ""].filter(Boolean).join(", ");
+  }
+  fillTowns();
+  $("region").addEventListener("change", function () { fillTowns($("town").value); composeAddress(); save(); });
+  $("town").addEventListener("change", function () {
+    var opt = this.options[this.selectedIndex], g = opt && opt.getAttribute("data-region");
+    if (g && $("region").value !== g) { $("region").value = g; fillTowns(this.value); }
+    $("townOther").hidden = this.value !== OTHER; if (this.value === OTHER) $("townOther").focus();
+    composeAddress(); save();
+  });
+  ["townOther", "street", "postcode"].forEach(function (id) { $(id).addEventListener("input", function () { composeAddress(); save(); }); });
+
+  /* ---------- ID: label follows the type; OCR cross-check on the photo ----------
+     Tesseract.js runs in the browser, loaded only when an image is chosen.
+     It reads the document and checks whether the number typed appears in
+     it. Advisory only: it tells the student to double-check, and tells the
+     office the result. It is NOT an authenticity check — no open-source OCR
+     can give one; that needs a KYC provider. */
+  var ID_LABELS = { "National ID": "National ID number", "Driver's License": "Driver's License number", "Passport": "Passport number" };
+  form.querySelectorAll('input[name="ID type"]').forEach(function (r) { r.addEventListener("change", function () { $("idnumLabel").textContent = ID_LABELS[r.value] || "ID number"; ocrCheck(); }); });
+  var ocrText = null, ocrRunning = false;
+  /* One OCR pass at a time, and one copy of the library. Dropping the old
+     "if (ocrRunning) return" fixed the stale-result bug but removed the only
+     cap: three retakes on a phone meant three Tesseract workers, each with
+     its own wasm core and ~15MB of language data. Serialising keeps both. */
+  var ocrChain = Promise.resolve(), tessLoad = null;
+  function ocrStatus(cls, msg) { var el = $("ocrStatus"); el.className = "mt-2 text-sm font-semibold " + cls; el.textContent = msg; el.hidden = !msg; }
+  /* Surname first: a T&T ID prints the family name in the largest type and it
+     survives a bad photo more often than the number does. Checked separately
+     from the number so the office learns WHICH half disagreed. */
+  function ocrNameCheck(hayRaw) {
+    var first = $("first").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    var last  = $("last").value.trim().toUpperCase().replace(/[^A-Z]/g, "");
+    if (last.length < 3) return null;                       // nothing to check yet
+    var hay = hayRaw.replace(/[^A-Z]/g, "");
+    var lastOk  = hay.indexOf(last) !== -1;
+    var firstOk = first.length >= 3 ? hay.indexOf(first) !== -1 : null;
+    /* Three states, not two. A surname that matches while the first name is
+       simply not legible is a partial READ, not evidence of a wrong document —
+       calling it a mismatch trains the office to ignore the flag. The surname
+       is the load-bearing one: it prints largest and survives a bad photo. */
+    return { last: lastOk, first: firstOk,
+             both:    lastOk && firstOk === true,
+             partial: lastOk && firstOk !== true,
+             bad:     !lastOk };
+  }
+  function ocrCheck() {
+    if (ocrText === null) return;
+    var typed = $("idnum").value.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    if (typed.length < 4) { ocrStatus("text-muted", "ID photo read. Type the ID number and we will check it against the photo."); $("ocrField").value = "read, number not yet typed"; return; }
+    var hay = ocrText.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+    var loose = hay.replace(/O/g, "0").replace(/[IL]/g, "1").replace(/S/g, "5").replace(/B/g, "8");
+    var typedLoose = typed.replace(/O/g, "0").replace(/[IL]/g, "1").replace(/S/g, "5").replace(/B/g, "8");
+    var numOk = hay.indexOf(typed) !== -1 || loose.indexOf(typedLoose) !== -1;
+    var nameRes = ocrNameCheck(ocrText.toUpperCase());
+    var nameBad = !!(nameRes && nameRes.bad);          // surname absent — the real signal
+    var nameFull = !!(nameRes && nameRes.both);
+    var ok = numOk && !nameBad;
+    ocrStatus(ok ? "text-green" : "text-red",
+      ok ? (nameFull ? "✓ The number and name you typed match the ID photo."
+                     : "✓ The number you typed matches the ID photo.")
+         : !numOk && nameBad ? "The number and the surname you typed do not appear on the ID photo. Check them, or retake the photo in good light — you can still continue."
+         : !numOk ? "We could not find that number on the ID photo. Check the number, or retake the photo in good light — you can still continue."
+         : "The surname you typed does not appear on the ID photo. Check the spelling, or retake the photo in good light — you can still continue.");
+    /* This string is read by a human in the registration email. A mismatch has
+       to be unmissable there, because it is the ONLY control — the check is
+       advisory by design and never blocks the student (client-side OCR on a
+       phone photo has a real false-negative rate, and anyone determined can
+       bypass it anyway; blocking would only stop honest people in bad light). */
+    $("ocrField").value = ok
+      ? ("matched — " + (nameFull ? "number and full name both found on the document"
+                                  : "number and surname found; first name not legible on the photo"))
+      : "\u26a0\uFE0F CHECK BY HAND \u2014 NOT MATCHED: "
+        + (!numOk && nameBad ? "neither the ID number nor the surname"
+           : !numOk ? "the ID number" : "the surname")
+        + " could be found on the uploaded document. Verify against the photo before confirming the seat.";
+  }
+  /* iPhone photos arrive as HEIC, which no browser previews and the server
+     stores but cannot show. heic2any (loaded only when needed) converts them
+     to JPEG in the browser and the JPEG is what gets uploaded and read. If
+     conversion fails the original still goes up — a registration never
+     fails on a photo format. */
+  function isHeic(file) { return !!file && (/heic|heif/i.test(file.type) || /\.hei[cf]$/i.test(file.name)); }
+  /* One counter per file input. Re-selecting a photo bumps it, so any result
+     from the previous selection — a HEIC conversion or an OCR pass still in
+     flight — is dropped instead of overwriting the newer file. Without this,
+     a slow conversion of photo A can replace photo B in the upload after the
+     student has already moved on. */
+  var fileGen = { idFile: 0, photoFile: 0 };
+  function loadScript(src, integrity) { return new Promise(function (res, rej) { var sc = document.createElement("script"); sc.src = src; if (integrity) { sc.integrity = integrity; sc.crossOrigin = "anonymous"; } sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); }
+  function normaliseImage(input, key, gen) {
+    var file = input.files[0];
+    if (!isHeic(file)) return Promise.resolve(file);
+    return (window.heic2any ? Promise.resolve() : loadScript("https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js", "sha384-OTofQ0MEeiSgh62havBcemCIK0gqj809wX6UA0uPISNMRnR6NZyCdGzX3SbLrgwL"))
+      .then(function () { return window.heic2any({ blob: file, toType: "image/jpeg", quality: 0.85 }); })
+      .then(function (out) {
+        var blob = Array.isArray(out) ? out[0] : out;
+        var jpg = new File([blob], file.name.replace(/\.hei[cf]$/i, "") + ".jpg", { type: "image/jpeg" });
+        /* only write the input back if this is still the current selection */
+        if (key && gen !== fileGen[key]) return jpg;
+        var dt = new DataTransfer(); dt.items.add(jpg); input.files = dt.files;   // the JPEG is what is submitted
+        return jpg;
+      })
+      .catch(function () { return file; });
+  }
+  function preview(imgId, file) {
+    var img = $(imgId);
+    if (!file || !/^image\/(jpeg|png)$/.test(file.type)) { img.hidden = true; img.removeAttribute("src"); return; }
+    var url = URL.createObjectURL(file); img.src = url; img.hidden = false; img.onload = function () { URL.revokeObjectURL(url); };
+  }
+  /* pull the document number out of the OCR text and pre-fill it when the
+     field is empty: National ID = 11 digits, passport = letters + digits,
+     otherwise the longest token with digits, 6–12 characters */
+  function guessIdNumber(text) {
+    var type = (form.querySelector('input[name="ID type"]:checked') || {}).value || "";
+    var tokens = (text.match(/[A-Z0-9][A-Z0-9-]{4,15}/gi) || []).map(function (t) { return t.replace(/-/g, "").toUpperCase(); }).filter(function (t) { return /\d/.test(t); });
+    if (type === "National ID") { var nid = tokens.filter(function (t) { return /^\d{11}$/.test(t); })[0]; if (nid) return nid; }
+    if (type === "Passport") { var pp = tokens.filter(function (t) { return /^[A-Z]{1,2}\d{6,8}$/.test(t); })[0]; if (pp) return pp; }
+    return tokens.filter(function (t) { return t.length >= 6 && t.length <= 14 && !/^(19|20)\d{6}$/.test(t); }).sort(function (a, b) { return b.length - a.length; })[0] || "";
+  }
+  function runOcr(file, gen) {
+    /* a newer photo was chosen while this one was still being prepared */
+    if (gen !== undefined && gen !== fileGen.idFile) return;
+    ocrText = null; $("ocrField").value = "";
+    if (!file || !/^image\//.test(file.type)) { ocrStatus("", ""); if (file) $("ocrField").value = "skipped — PDF"; return; }
+    /* a newer photo supersedes a run in flight rather than being dropped:
+       the old behaviour (return early while ocrRunning) applied photo A's
+       result to photo B */
+    ocrRunning = true;
+    ocrStatus("text-muted", "Reading your ID photo…");
+    var done = function (text) {
+      if (gen !== undefined && gen !== fileGen.idFile) { clearTimeout(timer); return; }
+      ocrRunning = false; ocrText = text || "";
+      if (!ocrText) { ocrStatus("text-muted", "Could not read text on this photo — the office will check it by hand."); $("ocrField").value = "unreadable"; return; }
+      if (!$("idnum").value.trim()) { var g = guessIdNumber(ocrText); if (g) { $("idnum").value = g; save(); } }
+      ocrCheck();
+    };
+    var timer = null;
+    var loadTess = function () {
+      if (window.Tesseract) return Promise.resolve();
+      /* memoised: two runs started before the first script lands must not append
+         two <script> tags. loadScript applies the SRI hash and crossorigin. */
+      if (!tessLoad) tessLoad = loadScript(
+        "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js",
+        "sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F");
+      return tessLoad;
+    };
+    ocrChain = ocrChain.then(function () {
+      /* superseded while it sat in the queue — never start it at all */
+      if (gen !== undefined && gen !== fileGen.idFile) { ocrRunning = false; return; }
+      timer = setTimeout(function () { if (ocrRunning) done(""); }, 25000);   // armed only once this run really begins
+      return loadTess()
+        .then(function () { return window.Tesseract.recognize(file, "eng", { logger: function () {} }); })
+        .then(function (r) { clearTimeout(timer); done(r && r.data ? r.data.text : ""); })
+        .catch(function () { clearTimeout(timer); done(""); });
+    });
+  }
+  $("idnum").addEventListener("input", ocrCheck);
+  ["first", "last"].forEach(function (id) { $(id).addEventListener("input", ocrCheck); });   // name is checked too, so re-run on it
+  $("source").addEventListener("change", function () { $("refWrap").hidden = this.value !== "Referral"; save(); });
+  TEXT_IDS.forEach(function (id) { $(id).addEventListener("input", save); });
+  [["idFile", "idFileName", "Tap to upload a photo or PDF"], ["photoFile", "photoFileName", "Tap to add your photo"], ["receiptFile", "receiptFileName", "Upload a screenshot or PDF of the transfer"]].forEach(function (x) {
+    $(x[0]).addEventListener("change", function () {
+      var input = this; $(x[1]).textContent = input.files[0] ? input.files[0].name : x[2];
+      if (x[0] === "receiptFile") return;
+      var myGen = ++fileGen[x[0]];   // this selection supersedes any earlier one
+      if (isHeic(input.files[0])) $(x[1]).textContent = "Converting your iPhone photo…";
+      normaliseImage(input, x[0], myGen).then(function (file) {
+        if (myGen !== fileGen[x[0]]) return;   // superseded while converting
+        $(x[1]).textContent = file ? file.name : x[2];
+        preview(x[0] === "idFile" ? "idPreview" : "photoPreview", file);
+        if (x[0] === "idFile") { bad("idFile", false); runOcr(file, myGen); }
+      });
+    });
+  });
+  $("copyAcct").addEventListener("click", function () {
+    var b = this; (navigator.clipboard ? navigator.clipboard.writeText($("acctNo").textContent) : Promise.reject()).then(function () { b.textContent = "Copied ✓"; setTimeout(function () { b.textContent = "Copy account number"; }, 1500); }, function () {});
+  });
+  form.addEventListener("submit", function (e) {
+    if (!validate(3)) { e.preventDefault(); return; }
+    $("signedOn").value = new Date().toISOString().slice(0, 10);
+    render();
+    $("submitBtn").disabled = true; $("submitBtn").textContent = "Submitting…";
+    $("cardBtn").disabled = true;
+    try { sessionStorage.removeItem("aoam_reg"); } catch (x) {}
+  });
+
+  /* ---------- boot: deep link, restore, first paint ---------- */
+  var slug = new URLSearchParams(location.search).get("course");
+  restore();
+  if (slug && !state.course) { var pre = form.querySelector('input[name="Course"][data-slug="' + slug.replace(/"/g, "") + '"]'); if (pre) { pre.checked = true; state.course = pre.value; } }
+  openStep(state.step || 1);
+})();
+</script>
+<script>
+(function(){
+  var f=document.querySelector('form'); if(!f) return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault(); e.stopImmediatePropagation();
+    var m=document.getElementById('previewMsg');
+    if(!m){ m=document.createElement('div'); m.id='previewMsg'; m.setAttribute('role','status');
+      m.style.cssText='position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0a0f0c;color:#fff;padding:14px 18px;border-radius:12px;font:600 15px Inter,Helvetica,Arial,sans-serif;z-index:9999;max-width:92vw;text-align:center';
+      document.body.appendChild(m); }
+    m.textContent='Preview only — nothing was sent or charged.';
+    clearTimeout(m._t); m._t=setTimeout(function(){ m.remove(); },4000);
+  },true);
+})();
+</script>
+</body>
+</html>
